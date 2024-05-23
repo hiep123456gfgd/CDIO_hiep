@@ -52,14 +52,14 @@
                     <div class="d-flex align-items-center">
                       <a
                         class="reset-anchor d-block animsition-link"
-                        href="detail.html"
+                        :href="`/detail/${item.id}`"
                         ><img :src="item.image" alt="..." width="70"
                       /></a>
                       <div class="ms-3">
                         <strong class="h6"
                           ><a
                             class="reset-anchor animsition-link"
-                            href="detail.html"
+                            :href="`/detail/${item.id}`"
                             >{{ item.name }}</a
                           ></strong
                         >

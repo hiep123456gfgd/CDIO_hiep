@@ -28,8 +28,9 @@ const routes = [
         meta : {layout : 'customer'}
     },
     {
-        path : '/detail',
+        path : '/detail/:id',
         component: ()=>import('../components/Customer/ProductDetail/index.vue'),
+        props: true,
         meta : {layout : 'customer'}
     },
     {
@@ -50,16 +51,6 @@ const routes = [
     {
         path : '/logincustomer',
         component: ()=>import('../components/Customer/DangNhapCustomer/index.vue'),
-        meta : {layout : 'dang'}
-    },
-    {
-        path : '/logoutadmin',
-        component: ()=>import('../components/Admin/DangKyAdmin/index.vue'),
-        meta : {layout : 'dang'}
-    },
-    {
-        path : '/logoutcustomer',
-        component: ()=>import('../components/Customer/DanhKyCustomer/index.vue'),
         meta : {layout : 'dang'}
     },
     {
