@@ -18,7 +18,7 @@
                       <h3 class="">Sign in Customer</h3>
                       <p>
                         Don't have an account yet?
-                        <a href="authentication-signup.html">Sign up here</a>
+                        <a href="/Sigupcustomer">Sign up here</a>
                       </p>
                     </div>
                     <div @submit.prevent="login" class="form-body">
@@ -98,7 +98,6 @@
 </template>
 <script>
 import axios from "axios";
-const toaster = createToaster({ position: "top-right" });
 export default {
   data() {
     return {
@@ -137,7 +136,6 @@ export default {
             this.errors.push({
               message: "Đã xảy ra lỗi trong quá trình đăng nhập.",
             });
-            toaster.success("Đã xảy ra lỗi trong quá trình đăng nhập.");
 
           }
         });
