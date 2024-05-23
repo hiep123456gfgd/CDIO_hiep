@@ -1,0 +1,147 @@
+<template>
+  <header class="header bg-white">
+    <div class="container px-lg-3">
+      <nav class="navbar navbar-expand-lg navbar-light py-3 px-lg-0">
+        <a class="navbar-brand" href="index.html"
+          ><span class="fw-bold text-uppercase text-dark">THE GIOI CA</span></a
+        >
+        <button
+          class="navbar-toggler navbar-toggler-end"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <router-link to="/">
+                <!-- Link--><a class="nav-link active" href="index.html"
+                  >Home</a
+                >
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/shop">
+                <!-- Link--><a class="nav-link" href="shop.html">Shop</a>
+              </router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/detail">
+                <!-- Link--><a class="nav-link" href="detail.html"
+                  >Product detail</a
+                >
+              </router-link>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                id="pagesDropdown"
+                href="#"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                >Pages</a
+              >
+              <div
+                class="dropdown-menu mt-3 shadow-sm"
+                aria-labelledby="pagesDropdown"
+              >
+                <a
+                  class="dropdown-item border-0 transition-link"
+                  href="index.html"
+                  >Homepage</a
+                ><a
+                  class="dropdown-item border-0 transition-link"
+                  href="shop.html"
+                  >Category</a
+                ><a
+                  class="dropdown-item border-0 transition-link"
+                  href="detail.html"
+                  >Product detail</a
+                ><a
+                  class="dropdown-item border-0 transition-link"
+                  href="cart.html"
+                  >Shopping cart</a
+                ><a
+                  class="dropdown-item border-0 transition-link"
+                  href="checkout.html"
+                  >Checkout</a
+                >
+              </div>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <router-link to="cart">
+              <li class="nav-item">
+                <a class="nav-link" href="cart.html">
+                  <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small
+                    class="text-gray fw-normal"
+                    >({{ cartItems.length }})</small
+                  ></a
+                >
+              </li>
+            </router-link>
+            <ul class="nav">
+              <li class="nav-item" v-if="token">
+                <a class="nav-link" href="#!">
+                  {{ user.email }}
+                </a>
+              </li>
+              <li class="nav-item" v-if="token">
+                <a class="nav-link" href="/" @click="logout">
+                  Logout
+                </a>
+              </li>
+              <li class="nav-item" v-else>
+                <router-link to="/logincustomer">
+                  <a class="nav-link" href="/logincustomer">
+                    <i class="fas fa-user me-1 text-gray fw-normal"></i>Login
+                  </a>
+                </router-link>
+              </li>
+            </ul>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      token: "",
+      user: null,
+      cartItems: null,
+    };
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('cartItems');
+      // Redirect to the login page
+      this.$router.push('/');
+      // Clear local data
+      this.token = "";
+      this.user = null;
+      this.cartItems = [];
+    }
+  },
+  created() {
+    // Retrieve the token from localStorage
+    this.token = localStorage.getItem("token");
+    this.user = JSON.parse(localStorage.getItem("user"));
+    this.cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    // if (!this.cartItems) {
+    //   this.cartItems = [];
+    // }
+  },
+};
+</script>
+<style></style>
