@@ -54,6 +54,11 @@ const routes = [
         meta : {layout : 'dang'}
     },
     {
+        path : '/Sigupcustomer',
+        component: ()=>import('../components/Customer/DanhKyCustomer/index.vue'),
+        meta : {layout : 'dang'}
+    },
+    {
         path : '/QLDanhMuc',
         component: ()=>import('../components/Admin/QuanLyDanhMuc/index.vue'),
         
