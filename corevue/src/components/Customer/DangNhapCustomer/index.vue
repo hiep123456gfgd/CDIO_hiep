@@ -98,6 +98,7 @@
 </template>
 <script>
 import axios from "axios";
+const toaster = createToaster({ position: "top-right" });
 export default {
   data() {
     return {
@@ -118,21 +119,26 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          // Handle successful login here
-          // For example, save the token and redirect
+
           console.log("Login successful:", response.data);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("user", JSON.stringify(response.data.data.user));
+          if(response.data.data.user.role === "User")
           this.$router.push("/");
+          else
+          this.$router.push("/QLProduct");
+          
         })
         .catch((e) => {
-          // Handle errors
           if (e.response && e.response.data && e.response.data.errors) {
             this.errors = e.response.data.errors;
+             toaster.success(e.response.data.errors);
           } else {
             this.errors.push({
               message: "Đã xảy ra lỗi trong quá trình đăng nhập.",
             });
+            toaster.success("Đã xảy ra lỗi trong quá trình đăng nhập.");
+
           }
         });
     },

@@ -76,9 +76,9 @@
             </li>
           </ul>
           <ul class="navbar-nav ms-auto">
-            <router-link to="cart">
+            <router-link to="/cart">
               <li class="nav-item">
-                <a class="nav-link" href="cart.html">
+                <a class="nav-link" href="cart">
                   <i class="fas fa-dolly-flatbed me-1 text-gray"></i>Cart<small
                     class="text-gray fw-normal"
                     >({{ cartItems.length }})</small
@@ -112,13 +112,18 @@
   </header>
 </template>
 <script>
+
+
+import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
       token: "",
       user: null,
-      cartItems: null,
     };
+  },
+  computed: {
+    ...mapGetters(["cartItems", "cartItemCount", "cartTotal"]),
   },
   methods: {
     logout() {
@@ -130,17 +135,12 @@ export default {
       // Clear local data
       this.token = "";
       this.user = null;
-      this.cartItems = [];
     }
   },
   created() {
     // Retrieve the token from localStorage
     this.token = localStorage.getItem("token");
     this.user = JSON.parse(localStorage.getItem("user"));
-    this.cartItems = JSON.parse(localStorage.getItem("cartItems"));
-    // if (!this.cartItems) {
-    //   this.cartItems = [];
-    // }
   },
 };
 </script>

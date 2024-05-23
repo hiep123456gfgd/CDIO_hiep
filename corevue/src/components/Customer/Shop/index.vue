@@ -48,7 +48,7 @@
             <div class="row mb-3 align-items-center">
               <div class="col-lg-6 mb-2 mb-lg-0">
                 <p class="text-sm text-muted mb-0">
-                  Showing 1–12 of 53 results
+                  Showing 1–12
                 </p>
               </div>
               <div class="col-lg-6">
@@ -117,7 +117,7 @@
                     </div>
                   </div>
                   <h6>
-                    <a class="reset-anchor" href="detail.html">{{
+                    <a class="reset-anchor" :href="`/detail/${item.id}`">{{
                       item.name
                     }}</a>
                   </h6>
@@ -215,7 +215,7 @@ export default {
     getProductsByCategory(cate) {
       axios
         .get(
-          `http://localhost:3000/api/product/cat/?catName=${cate}&limit=10&page=1`
+          `http://localhost:3000/api/product/cat/?catName=${cate}&limit=12&page=1`
         )
         .then((response) => {
           this.products = response.data.data.data;

@@ -62,13 +62,13 @@
             <div class="position-relative mb-3">
               <div class="badge text-white bg-"></div>
 
-              <a class="d-block" href="/"
+              <a class="d-block" :href="`/detail/${item.id}`"
                 ><img class="img-fluid w-100" :src="item.image" alt="..."
               /></a>
               <div class="product-overlay">
                 <ul class="mb-0 list-inline">
                   <li class="list-inline-item m-0 p-0">
-                    <a class="btn btn-sm btn-outline-dark" href="#!"
+                    <a class="btn btn-sm btn-outline-dark" :href="`/detail/${item.id}`"
                       ><i class="far fa-heart"></i
                     ></a>
                   </li>
@@ -89,7 +89,7 @@
               </div>
             </div>
             <h6>
-              <a class="reset-anchor" href="detail.html">{{ item.name }}</a>
+              <a class="reset-anchor" :href="`/detail/${item.id}`">{{ item.name }}</a>
             </h6>
             <p class="small text-muted">{{ item.price }}</p>
           </div>
@@ -175,16 +175,32 @@
 
 <script>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
+import { useStore } from "vuex";
+
 export default {
-  data() {
-    return {
-      categories: [],
-      products: [],
-    };
-  },
   setup() {
+    const categories = ref([]);
+    const products = ref([]);
     const cartItems = ref([]);
+
+    const store = useStore();
+
+    // Use Vuex actions
+    const addToCart = (item) => {
+      store.dispatch("addToCart", item);
+      alert("Thêm vào giỏ hàng thành công");
+    };
+
+    const removeFromCart = (item) => {
+      store.dispatch("removeFromCart", item);
+      alert("Xóa khỏi giỏ hàng thành công");
+    };
+
+    // Use Vuex getters
+    const vuexCartItems = computed(() => store.getters.cartItems);
+    const cartItemCount = computed(() => store.getters.cartItemCount);
+    const cartTotal = computed(() => store.getters.cartTotal);
 
     // Load cart items from localStorage on component mount
     onMounted(() => {
@@ -197,56 +213,38 @@ export default {
       }
     });
 
-    // Function to add an item to the cart
-    const addToCart = (item) => {
-      const existingItem = cartItems.value.find(
-        (cartItem) => cartItem.id === item.id
-      );
-      if (existingItem) {
-        // If the item already exists in the cart, update its quantity
-        cartItems.value = cartItems.value.map((cartItem) =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + 1 }
-            : cartItem
-        );
-      } else {
-        // If the item is not in the cart, add it with quantity 1
-        cartItems.value = [...cartItems.value, { ...item, quantity: 1 }];
+    const getCategories = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/category/");
+        categories.value = response.data;
+      } catch (error) {
+        console.error(error);
       }
-      // Update localStorage with the updated cart items
-      localStorage.setItem("cartItems", JSON.stringify(cartItems.value));
-      alert("Thêm vào giỏ hàng thành công")
     };
 
-    // Function to remove an item from the cart
-    const removeToCart = (item) => {
-      const existingItem = cartItems.value.find(
-        (cartItem) => cartItem.id === item.id
-      );
-      if (existingItem) {
-        if (existingItem.quantity > 1) {
-          // If the item quantity is more than 1, decrease its quantity
-          cartItems.value = cartItems.value.map((cartItem) =>
-            cartItem.id === item.id
-              ? { ...cartItem, quantity: cartItem.quantity - 1 }
-              : cartItem
-          );
-        } else {
-          // If the item quantity is 1, remove it from the cart
-          cartItems.value = cartItems.value.filter(
-            (cartItem) => cartItem.id !== item.id
-          );
-        }
-        // Update localStorage with the updated cart items
-        localStorage.setItem("cartItems", JSON.stringify(cartItems.value));
-        alert("Xóa khỏi giỏ hàng thành công")
+    const getProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/product");
+        products.value = response.data.data.data;
+      } catch (error) {
+        console.error(error);
       }
     };
+
+    onMounted(() => {
+      getCategories();
+      getProducts();
+    });
 
     return {
+      categories,
+      products,
       cartItems,
       addToCart,
-      removeToCart,
+      removeFromCart,
+      vuexCartItems,
+      cartItemCount,
+      cartTotal,
     };
   },
   computed: {
@@ -273,32 +271,6 @@ export default {
         }
       });
     },
-  },
-  methods: {
-    getCategories() {
-      axios
-        .get("http://localhost:3000/api/category/")
-        .then((response) => {
-          this.categories = response.data;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    },
-    getProducts() {
-      axios
-        .get("http://localhost:3000/api/product")
-        .then((response) => {
-          this.products = response.data.data.data;
-        })
-        .catch((e) => {
-          console.error(e);
-        });
-    },
-  },
-  created() {
-    this.getCategories();
-    this.getProducts();
   },
 };
 </script>
